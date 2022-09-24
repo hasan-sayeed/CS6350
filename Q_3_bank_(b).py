@@ -2,10 +2,10 @@ import pandas as pd
 import numpy as np
 from id3_functions import id3, predict
 
-df_result_train = pd.DataFrame(columns = ['Information Gain', 'Majority Error', 'Gini Index'],
-                                index = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16'])
-df_result_test = pd.DataFrame(columns = ['Information Gain', 'Majority Error', 'Gini Index'],
-                                index = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16'])
+# df_result_train = pd.DataFrame(columns = ['Information Gain', 'Majority Error', 'Gini Index'],
+#                                 index = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16'])
+# df_result_test = pd.DataFrame(columns = ['Information Gain', 'Majority Error', 'Gini Index'],
+#                                 index = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16'])
 
 #  Loading the training dataset.
 

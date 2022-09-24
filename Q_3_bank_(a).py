@@ -2,10 +2,10 @@ import pandas as pd
 import numpy as np
 from id3_functions import id3, predict
 
-df_result_train = pd.DataFrame(columns = ['Information Gain', 'Majority Error', 'Gini Index'],
-                                index = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16'])
-df_result_test = pd.DataFrame(columns = ['Information Gain', 'Majority Error', 'Gini Index'],
-                                index = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16'])
+# df_result_train = pd.DataFrame(columns = ['Information Gain', 'Majority Error', 'Gini Index'],
+#                                 index = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16'])
+# df_result_test = pd.DataFrame(columns = ['Information Gain', 'Majority Error', 'Gini Index'],
+#                                 index = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16'])
 
 #  Loading the training dataset.
 
@@ -16,7 +16,7 @@ df_train = pd.read_csv('data/bank/train.csv')
 df_test = pd.read_csv('data/bank/test.csv')
 
 metrics = ['entropy', 'majority error', 'gini index']
-t_ds = [1, 2, 3, 4, 5]#, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
+t_ds = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
 
 dict_train = {'entropy': {1: None, 2: None, 3: None, 4: None, 5: None, 6: None, 7: None, 8: None, 9: None, 10: None, 11: None, 12: None, 13: None, 14: None, 15: None, 16: None},
          'majority error': {1: None, 2: None, 3: None, 4: None, 5: None, 6: None, 7: None, 8: None, 9: None, 10: None, 11: None, 12: None, 13: None, 14: None, 15: None, 16: None},
