@@ -29,14 +29,14 @@ for metric in metrics:
         #  Accuracy
         train_accuracy = predict(df_train, tree)
         test_accuracy = predict(df_test, tree)
-        print(train_accuracy, test_accuracy)
+        # print(train_accuracy, test_accuracy)
         dict_train[metric][t_d] = train_accuracy
         dict_test[metric][t_d] = test_accuracy
-        print(t_d, 'training done!')
+        # print(t_d, 'training done!')
 
-print(dict_test)
+# print(dict_test)
 print('Accuracy in training set for 3 different heuristics. Index value indicates tree depth.\n', pd.DataFrame.from_dict(dict_train))
-print('Accuracy in test set for 3 different heuristics. Index value indicates tree depth.\n', pd.DataFrame.from_dict(dict_test, dtype = float64))
+print('Accuracy in test set for 3 different heuristics. Index value indicates tree depth.\n', pd.DataFrame.from_dict(dict_test))
 
 
 

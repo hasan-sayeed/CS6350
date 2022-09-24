@@ -185,8 +185,11 @@ def predict(df, tree):
     inst = df.iloc[i,:]
     prediction = predict_core(inst, tree)
     y_predict.append(prediction)
-  accuracy = metrics.accuracy_score(df[df.columns[-1]], y_predict)
-  return accuracy
+  error = 1 - sum(1 for x,y in zip(df[df.columns[-1]],y_predict) if x == y) / len(df[df.columns[-1]])
+  return error
+  
+  # accuracy = metrics.accuracy_score(df[df.columns[-1]], y_predict)
+  # return accuracy
 
 # def id3(df, metric = 'entropy', tree_depth = 1000):
   
