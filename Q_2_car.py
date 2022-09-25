@@ -1,11 +1,6 @@
 import pandas as pd
 from id3_functions import id3, predict
 
-# df_result_train = pd.DataFrame(columns = ['Information Gain', 'Majority Error', 'Gini Index'],
-#                                 index = ['1', '2', '3', '4', '5', '6'])
-# df_result_test = pd.DataFrame(columns = ['Information Gain', 'Majority Error', 'Gini Index'],
-#                                 index = ['1', '2', '3', '4', '5', '6'])
-
 df_train = pd.read_csv('data/car/train.csv')
 df_test = pd.read_csv('data/car/test.csv')
 
@@ -24,17 +19,15 @@ for metric in metrics:
     for t_d in t_ds:
 
         # train
-        # t_o = id4(df_train, metric = metric, tree_depth = t_d)
         tree= id3(df_train, metric = metric, tree_depth = t_d)
-        # tree= t_o.id()
-        print(tree)
+        # print(tree)
 
         #  Accuracy
         train_accuracy = predict(df_train, tree)
-        # test_accuracy = predict(df_test, tree)
+        test_accuracy = predict(df_test, tree)
         # print(train_accuracy, test_accuracy)
         dict_train[metric][t_d] = train_accuracy
-        # dict_test[metric][t_d] = test_accuracy
+        dict_test[metric][t_d] = test_accuracy
         # print(t_d, 'training done!')
 
 # print(dict_test)

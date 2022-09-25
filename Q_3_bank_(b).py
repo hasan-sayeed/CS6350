@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from id3_functions import id3, predict
+from id3_functions import id3, predict, proccess_train_for_numerical_value, proccess_test_for_numerical_value
 
 # df_result_train = pd.DataFrame(columns = ['Information Gain', 'Majority Error', 'Gini Index'],
 #                                 index = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16'])
@@ -15,6 +15,7 @@ df_train = pd.read_csv('data/bank/train.csv')
 
 df_train_2 = df_train.replace('unknown',np.nan)
 df_train_3 = df_train_2.fillna(df_train_2.mode().iloc[0])
+df_train_4, train_median = proccess_train_for_numerical_value(df_train_3)
 
 #  Loading the test dataset.
 
@@ -24,6 +25,7 @@ df_test = pd.read_csv('data/bank/test.csv')
 
 df_test_2 = df_test.replace('unknown',np.nan)
 df_test_3 = df_test_2.fillna(df_test_2.mode().iloc[0])
+df_test_4 = proccess_test_for_numerical_value(df_test_3, train_median)
 
 metrics = ['entropy', 'majority error', 'gini index']
 t_ds = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
@@ -40,11 +42,12 @@ for metric in metrics:
     for t_d in t_ds:
 
         # train
-        tree= id3(df_train_3, metric = metric, tree_depth = t_d)
+        tree= id3(df_train_4, metric = metric, tree_depth = t_d)
+        # print(tree)
 
         #  Accuracy
-        train_accuracy = predict(df_train_3, tree)
-        test_accuracy = predict(df_test_3, tree)
+        train_accuracy = predict(df_train_4, tree)
+        test_accuracy = predict(df_test_4, tree)
         print(train_accuracy, test_accuracy)
         dict_train[metric][t_d] = train_accuracy
         dict_test[metric][t_d] = test_accuracy

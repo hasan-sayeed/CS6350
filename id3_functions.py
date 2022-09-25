@@ -1,8 +1,6 @@
-from msilib.schema import Class
 import numpy as np
+import pandas as pd
 from statistics import mode
-from sklearn.metrics import accuracy_score
-from sklearn import metrics
 
 # Entropy of the whole dataset
 
@@ -126,27 +124,27 @@ def depth(d):
 
 # constructing the tree. Taking the metric and tree depth from user.
 
-def id3(df, tree = None, metric = 'entropy', tree_depth= 1000):
+def id3(df, metric, tree_depth, tree = None, t_d = 1):
   
   '''
   Parameters
         ----------
-        metric : str, optional
+        metric : str.
             Which varient of information gain you want to use. Possible values are
-            "entropy", "majority error" and "gini index", by default "entropy.
-        tree_depth : str, optional
-            Maximum tree depth you want, by default 1000.
+            "entropy", "majority error" and "gini index".
+        tree_depth : str.
+            Maximum tree depth you want.
   '''
 
   node = best_attribute(df, metric)               # Get the best attribute first
   att_counts = np.unique(df[node])
   label = df.keys()[-1]
-  t_d = 1
+  # t_d = 1
   if tree is None:
     tree = {}
     tree[node] = {}
   # print(depth(tree))
-  for att_count in att_counts:           # Go to each branch
+  for att_count in att_counts:           # Goes to each branch
     updated_data = updated_dataframe(df,node,att_count)
     label_vals, label_counts = np.unique(updated_data[label], return_counts = True)
     # t_d = 1
@@ -159,52 +157,12 @@ def id3(df, tree = None, metric = 'entropy', tree_depth= 1000):
     elif t_d == tree_depth:
       majority_label = np.where(label_counts == np.amax(label_counts))
       tree[node][att_count] = label_vals[majority_label[0][0]]
-      
-      # t_d += 1
+      # t_d = 1
     elif t_d < tree_depth:
-      tree[node][att_count] = id3(updated_data, metric = 'entropy', tree_depth= t_d)
-      t_d += 1
       # t_d += 1
-      
-      # if t_d == tree_depth:
-      #   majority_label = np.where(label_counts == np.amax(label_counts))
-      #   tree[node][att_count] = label_vals[majority_label[0][0]]
-      # elif t_d < tree_depth:
-      #   tree[node][att_count] = id3(updated_data, metric = 'entropy', tree_depth= t_d)
-      #   t_d += 1
+      tree[node][att_count] = id3(updated_data, metric, tree_depth, t_d = t_d+1)
       
   return tree
-
-# class id4:
-
-#   def __init__(self, df, metric, tree_depth):
-#     self.df = df
-#     self.metric = metric
-#     self.tree_depth = tree_depth
-
-#   def id(self, tree = None):
-#     node = best_attribute(self.df, self.metric)               # Get the best attribute first
-#     att_counts = np.unique(self.df[node])
-#     label = self.df.keys()[-1]
-#     # t_d = 1
-#     if tree is None:
-#       tree = {}
-#       tree[node] = {}
-#     for att_count in att_counts:           # Go to each branch
-#       updated_data = updated_dataframe(self.df,node,att_count)
-#       label_vals, label_counts = np.unique(updated_data[label], return_counts = True)
-#       t_d = 1
-#       if len(label_counts) == 1:
-#         tree[node][att_count] = label_vals[0]
-#       elif t_d == self.tree_depth:
-#         majority_label = np.where(label_counts == np.amax(label_counts))
-#         tree[node][att_count] = label_vals[majority_label[0][0]]
-#       elif t_d < self.tree_depth:
-#         tree[node][att_count] = id4(updated_data)
-#         t_d += 1
-        
-#     return tree
-
 
 #  A function to get the most common label of the previous tree. Reference - https://stackoverflow.com/questions/27755828/get-final-elements-of-nested-dictionary-in-python
 
@@ -242,3 +200,34 @@ def predict(df, tree):
     y_predict.append(prediction)
   error = 1 - sum(1 for x,y in zip(df[df.columns[-1]],y_predict) if x == y) / len(df[df.columns[-1]])
   return error
+
+# processing training data to convert numerical values into catagorical using median
+
+def proccess_train_for_numerical_value(df):     # returns modified training data and the median value
+  df_o = df.select_dtypes(include='object')
+  df_n = df.select_dtypes(include=[np.int64])
+  b = pd.DataFrame()
+  m = {}
+  for d in df_n.columns:
+    med = np.median(df_n[d])
+    m[d] = med
+    b[d] = df_n[d]>med
+  pd_new = pd.concat([df_o, b], axis=1)
+  pd_new = pd_new[list(df.columns)]
+  
+  return pd_new, m
+
+# processing training data to convert numerical values into catagorical using median of the TRAINING SET
+
+def proccess_test_for_numerical_value(df, train_m):     # returns modified training data and the median value
+  df_o = df.select_dtypes(include='object')
+  df_n = df.select_dtypes(include=[np.int64])
+  b = pd.DataFrame()
+  for d in df_n.columns:
+    # med = np.median(df_n[c])
+    # m[d] = med
+    b[d] = df_n[d]>train_m[d]
+  pd_new = pd.concat([df_o, b], axis=1)
+  pd_new = pd_new[list(df.columns)]
+  
+  return pd_new
