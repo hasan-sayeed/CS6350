@@ -1,3 +1,9 @@
+#  This work was done in collaboration with Ramsey Issa, PhD candidate MSE
+
+#  Sources used: lecture slides, github, stackoverflow, towards data science articles 
+
+
+
 import numpy as np
 import pandas as pd
 from statistics import mode
