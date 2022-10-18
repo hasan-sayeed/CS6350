@@ -114,19 +114,19 @@ def updated_dataframe(df, attribute, val):
   return df[df[attribute] == val].reset_index(drop = True)
 
 
-from collections import deque
+# from collections import deque
 
-def depth(d):
-    queue = deque([(id(d), d, 1)])
-    memo = set()
-    while queue:
-        id_, o, level = queue.popleft()
-        if id_ in memo:
-            continue
-        memo.add(id_)
-        if isinstance(o, dict):
-            queue += ((id(v), v, level + 1) for v in o.values())
-    return level
+# def depth(d):
+#     queue = deque([(id(d), d, 1)])
+#     memo = set()
+#     while queue:
+#         id_, o, level = queue.popleft()
+#         if id_ in memo:
+#             continue
+#         memo.add(id_)
+#         if isinstance(o, dict):
+#             queue += ((id(v), v, level + 1) for v in o.values())
+#     return level
 
 # constructing the tree. Taking the metric and tree depth from user.
 

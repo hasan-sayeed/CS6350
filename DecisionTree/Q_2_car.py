@@ -1,8 +1,8 @@
 import pandas as pd
 from id3_functions import id3, predict
 
-df_train = pd.read_csv('data/car/train.csv')
-df_test = pd.read_csv('data/car/test.csv')
+df_train = pd.read_csv('D:/Fall_2022/ML/HWs/hw_2/CS6350/DecisionTree/data/car/train.csv')
+df_test = pd.read_csv('D:/Fall_2022/ML/HWs/hw_2/CS6350/DecisionTree/data/car/test.csv')
 
 metrics = ['entropy', 'majority error', 'gini index']
 t_ds = [1, 2, 3, 4, 5, 6]

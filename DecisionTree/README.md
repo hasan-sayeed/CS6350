@@ -8,4 +8,4 @@ To predict the accuracy of the tree on a dataset following function can be calle
 
 `predict(test_data, tree)`
 
-Where `test_data` is the dataset user wants to use the previously constructed tree on and `tree` is the tree that can be constructed following the previous step.
+Where `test_data` is the dataset user wants to use the previously constructed tree on and `tree` is the tree that can be constructed following the previous step.   
