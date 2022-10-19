@@ -1,6 +1,11 @@
-Outlook,Temperature,Humidity,Wind,label
-Sunny,Hot,High,Weak,No
-Sunny,Hot,High,Strong,No
-Sunny,Mild,High,Weak,No
-Sunny,Cool,Normal,Weak,Yes
-Sunny,Mild,Normal,Strong,Yes
+x1,x2,label
+2,3,yes
+2.1,2,yes
+4.5,6,yes
+4,3.5,no
+3.5,1,no
+5,7,yes
+5,3,no
+6,5.5,yes
+8,6,no
+8,2,no

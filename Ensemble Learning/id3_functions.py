@@ -12,11 +12,18 @@ from statistics import mode
 
 def entropy_of_total(df):
   label = df.keys()[-1]
-  counts = df[label].unique()    # unique labels
-  total_entropy = 0
-  for count in counts:
-    probability = df[label].value_counts()[count]/len(df[label])
-    total_entropy += -probability * np.log2(probability)
+  # counts = df[label].unique()    # unique labels
+  targets = df[label].tolist()
+  p = []
+  n = []
+  for target in targets:
+    if target>0:
+      p.append(target)
+    else:
+      n.append(target)
+  probability_p = sum(p)/(sum(p)-sum(n))
+  probability_n = -sum(n)/(sum(p)-sum(n))
+  total_entropy = -probability_p * np.log2(probability_p) - probability_n * np.log2(probability_n)
   return np.float64(total_entropy)
 
 # Entropy of a single attributes
@@ -24,16 +31,34 @@ def entropy_of_total(df):
 def entropy_of_attribute(df, attribute):
   label = df.keys()[-1]
   attr_vals = df[attribute].unique()
-  target_vals = df[label].unique()
+  # target_vals = df[label].tolist()
+  targets = df[label].tolist()
+  p_o = []
+  n_o = []
+  for target in targets:
+    if target>0:
+      p_o.append(target)
+    else:
+      n_o.append(target)
   entropy = 0
   for attr_val in attr_vals:
+    target_vals = df[label][df[attribute] == attr_val].tolist()
+    p =[]
+    n = []
     entropy_tmp = 0
     for target_val in target_vals:
-      num = len(df[attribute][df[attribute] == attr_val][df[label] == target_val])
-      den = len(df[attribute][df[attribute] == attr_val])
-      probability = num/den
-      entropy_tmp += -probability * np.log2(probability + 0.000001)
-    entropy += (den/len(df))*entropy_tmp
+      if target_val>0:
+        p.append(target_val)
+      else:
+        n.append(target_val)
+    probability_p = sum(p)/(sum(p)-sum(n))
+    probability_n = -sum(n)/(sum(p)-sum(n))
+    entropy_tmp += -probability_p * np.log2(probability_p + 0.000001) - probability_n * np.log2(probability_n + 0.000001)  
+      # num = len(df[attribute][df[attribute] == attr_val][df[label] == target_val])
+      # den = len(df[attribute][df[attribute] == attr_val])
+      # probability = num/den
+      # entropy_tmp += -probability * np.log2(probability + 0.000001)
+    entropy += ((sum(p)-sum(n))/(sum(p_o)-sum(n_o)))*entropy_tmp
   return np.float64(entropy)
 
 # Majority error of the whole dataset
@@ -215,9 +240,9 @@ def predict_train(df, tree, actual_label):
   length = len(y_predict)
   for i in range(0, length):              # STEP 2
     if actual_label[i] != y_predict[i]:
-        loss.append(0)
-    else:
         loss.append(1)
+    else:
+        loss.append(0)
   return error, y_predict, loss
 
 def predict(df, tree):
@@ -227,7 +252,7 @@ def predict(df, tree):
     prediction = predict_core(inst, tree)
     y_predict.append(prediction)
   error = 1 - sum(1 for x,y in zip(df[df.columns[-1]],y_predict) if x == y) / len(df[df.columns[-1]])
-  return error
+  return error, y_predict
 
 # processing training data to convert numerical values into catagorical using median
 
