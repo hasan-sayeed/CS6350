@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 from statistics import mode
-from id3_functions import id3, predict_train, predict
+from id3_functions_ensamble import id3, predict_train, predict
 
 
 #  First weight
