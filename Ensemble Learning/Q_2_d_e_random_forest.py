@@ -97,7 +97,7 @@ for num in num_subset:
 	train_errors, test_errors = process_data(features_dict, label_dict, train_data, test_data, num, 'y')
 	print()
 	print()
-	print('Test error for subset size %d: ', num,test_errors[-1])
+	print('Test error for subset size %d: ', num, test_errors[-1])
 	save_fig(train_errors, test_errors, num, 'bank_'+str(num)+'.png')
 
 def bias_e(df, y_pred_list):
