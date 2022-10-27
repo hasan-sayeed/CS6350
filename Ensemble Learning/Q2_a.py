@@ -8,7 +8,7 @@ from AdaBoost_functions import first_w, adaboost
 df_train = pd.read_csv('D:/Fall_2022/ML/HWs/hw_2/CS6350/DecisionTree/data/bank/train.csv')
 df_train, train_median = proccess_train_for_numerical_value(df_train)
 df_train['label'] = df_train['label'].map({'yes': 1, 'no': -1})
-actual_label = df_train['label'].values.tolist()
+actual_label = df_train.to_numpy()[:,-1]
 
 df_test = pd.read_csv('D:/Fall_2022/ML/HWs/hw_2/CS6350/DecisionTree/data/bank/test.csv')
 df_test = proccess_test_for_numerical_value(df_test, train_median)

@@ -1,0 +1,1 @@
+python Q_d_LR.py

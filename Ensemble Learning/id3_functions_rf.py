@@ -285,9 +285,10 @@ def predict_train(df, tree, actual_label):
 
 class ID3:
 	# Option 0: Entropy, option 1: ME, Option 2: GI
-	def __init__(self, option=1, max_depth = 10):
+	def __init__(self, option=1, max_depth = 10, subset=2):
 		self.option = option
 		self.max_depth = max_depth
+		self.subset = subset
 	
 	
 	def set_max_depth(self, max_depth):
@@ -344,7 +345,7 @@ class ID3:
 		return heuristics
 
 
-	def get_feature_with_max_gain(self, data, label_dict, features_dict):
+	def get_feature_with_max_gain(self, data, label_dict, features_dict, sampled_features):
 
 		heuristics = self.get_heuristics()
 		measure = heuristics(data, label_dict)
@@ -352,11 +353,12 @@ class ID3:
 		max_gain = float('-inf')
 		max_f_name = ''
 
-		for f_name, f_values in features_dict.items():
+		for f_name in sampled_features:
 			gain = 0
+			f_values = features_dict[f_name]
 			for val in f_values:
 				subset = data[data[f_name] == val]
-				p = len(subset.index) / len(data)
+				p = len(subset) / len(data)
 				
 				gain += p * heuristics(subset, label_dict)
 
@@ -395,7 +397,16 @@ class ID3:
 
 		
 		children = {}
-		max_f_name = self.get_feature_with_max_gain(data, label_dict, features_dict)
+
+		# randomly select features 
+		keys = list(features_dict.keys())
+
+		if len(keys) > self.subset:
+			sampled_features = np.random.choice(keys, self.subset, replace=False)
+		else:
+			sampled_features = keys 
+
+		max_f_name = self.get_feature_with_max_gain(data, label_dict, features_dict, sampled_features)
 		dt_node.set_feature(max_f_name)
 
 		# remove the feature that has been splitted on, get remaining features

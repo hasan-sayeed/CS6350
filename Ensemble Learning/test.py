@@ -1,14 +1,15 @@
 import pandas as pd
 import numpy as np
 from statistics import mode
-from id3_functions_ensamble import id3, vals, predict_train, proccess_train_for_numerical_value, proccess_test_for_numerical_value, me_of_total, me_of_attribute, entropy_of_total, entropy_of_attribute
+from id3_functions_ensamble import id3, vals, predict, predict_train, proccess_train_for_numerical_value, proccess_test_for_numerical_value, me_of_total, me_of_attribute, entropy_of_total, entropy_of_attribute
 
 
 # #  Loading the training dataset.
 
 df = pd.read_csv('D:/Fall_2022/ML/HWs/hw_2/CS6350/Ensemble Learning/data/car/PlayTennis.csv')
 # df['label'] = df['label'].map({'Yes': 1, 'No': -1})
-actual_label = df['label'].values.tolist()
+actual_label = df.to_numpy()[:,-1]
+# print(len(df))
 # print(df)
 # print(actual_label)
 
@@ -20,10 +21,11 @@ actual_label = df['label'].values.tolist()
 # df['label'] = df['label']*first_w
 # print(df)
 
-# tree= id3(df, metric = 'entropy', tree_depth = 1)
+tree= id3(df, metric = 'entropy', tree_depth = 1)
 # error, pred, loss = predict_train(df, tree, actual_label)
 # print(pred)
 # print(loss)
+print(tree)
 
 # # total error epsilon
 # epsilon = sum([x*y for x,y in zip(loss,first_w)])
@@ -100,38 +102,38 @@ actual_label = df['label'].values.tolist()
 # print(sum(w))
 # print(df)
 
-print(df)
-# print(df['label'].value_counts()[1])
-x = df['label'].tolist()
-print(x)
-
-p = []
-n = []
-
-for l in x:
-    if l>0:
-        p.append(l)
-    else:
-        n.append(l)
-
-print(sum(p))
-print(-sum(n))
-print(sum(p)-sum(n))
-# probability_p = sum(p)/(sum(p)-sum(n))
-# probability_n = -sum(n)/(sum(p)-sum(n))
-# print(probability_p)
-# print(probability_n)
-a = entropy_of_total(df)
-print(a)
-
-# target_vals = df['label'][df['Outlook'] == 'Sunny'].tolist()
-# print(target_vals)
 # print(df)
-# s=sum(df['label'])
-# print(s)
+# # print(df['label'].value_counts()[1])
+# x = df['label'].tolist()
+# print(x)
 
-b = entropy_of_attribute(df, 'Temperature')
-print(a-b)
+# p = []
+# n = []
+
+# for l in x:
+#     if l>0:
+#         p.append(l)
+#     else:
+#         n.append(l)
+
+# print(sum(p))
+# print(-sum(n))
+# print(sum(p)-sum(n))
+# # probability_p = sum(p)/(sum(p)-sum(n))
+# # probability_n = -sum(n)/(sum(p)-sum(n))
+# # print(probability_p)
+# # print(probability_n)
+# a = entropy_of_total(df)
+# print(a)
+
+# # target_vals = df['label'][df['Outlook'] == 'Sunny'].tolist()
+# # print(target_vals)
+# # print(df)
+# # s=sum(df['label'])
+# # print(s)
+
+# b = entropy_of_attribute(df, 'Temperature')
+# print(a-b)
 
 
 

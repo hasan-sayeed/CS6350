@@ -1,0 +1,3 @@
+python Q_2_a_AdaBoost.py
+python Q_2_b_c_bagged_tree.py
+python Q_2_d_e_random_forest.py
