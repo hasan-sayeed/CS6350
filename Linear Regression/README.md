@@ -1,1 +1,1 @@
-Linear regression
+Run `run_linear_reg.sh` for results of question 4.
