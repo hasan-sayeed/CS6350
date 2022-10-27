@@ -8,74 +8,68 @@ from numpy.linalg import inv
 #  BGD functions
 
 def cost_function(X, Y, W):
-	res = 0 
+	rs = 0
+
+	yt = 0
 	for i in range(len(X)):
-		temp = (Y[i] - np.dot(W, X[i]))**2 
-		res += temp 
-	return 0.5*res
+		tmp = (Y[i] - np.dot(W, X[i]))**2 
+		yt += 1
+		rs += tmp 
+	return 0.5*rs
 
 
-def LMS_gradiant(X, Y, r):
+def Least_mean_sqr_grad(X, Y, r):
 	costs = []  
-
 	W = np.zeros(X.shape[1])
+	
+	a = np.ones(X.shape[1])
+	b = math.inf
 
-
-	e = math.inf
-
-	while e > 10e-6:
+	while b > 10e-6:
 		grad_w = np.zeros(X.shape[1])
-		
 		for j in range(len(X[0])):
-			temp = 0 
+			tmp = 0
+			ig = 0
 			for i in range(len(X)):
-				temp += X[i][j] *(Y[i] - np.dot(W, X[i]))
-			grad_w[j] = temp 
-
+				ig += tmp
+				tmp += X[i][j] *(Y[i] - np.dot(W, X[i]))
+			grad_w[j] = tmp 
 		new_W = W + r*grad_w
-
-		e = LA.norm(W - new_W)
+		b = LA.norm(W - new_W)
 		costs.append(cost_function(X, Y, W))
-
 		W = new_W
-
 	costs.append(cost_function(X, Y, W))
 	return W, costs
 
 
 #  SGD functions
 
-def sgd(X, Y, r):
-
+def stochastic_grad_descent(X, Y, r):
 	W = np.zeros(X.shape[1])
-
-
+	a = np.ones(X.shape[1])
 	e = math.inf
-
 	costs = [cost_function(X, Y, W)]
 
 	while e > 10e-10:
 		i = random.randrange(len(X))
-
+		ig = 0
 		grad_w = np.zeros(X.shape[1])
 		for j in range(len(X[0])): 
 			grad_w[j] = X[i][j] *(Y[i] - np.dot(W, X[i]))
-
+			ig += 1
 		new_W = W + r*grad_w
 		W = new_W
 		new_cost = cost_function(X, Y, W) 
 		e = abs(new_cost - costs[-1])
 		costs.append(new_cost)
-
 	return W, costs
 
 
-# train data
-train = np.loadtxt('data/concrete/train.csv', delimiter =',',usecols = range(8))
-#test data    
+
+train = np.loadtxt('data/concrete/train.csv', delimiter =',',usecols = range(8)) 
 test = np.loadtxt('data/concrete/test.csv', delimiter =',',usecols = range(8))
 
-# get vector x and y for both train and test datasets
+
 X_train = train[:,:-1]
 one_train = np.ones(X_train.shape[0])
 D_train = np.column_stack((one_train, X_train))
@@ -87,12 +81,11 @@ D_test = np.column_stack((one_test, X_test))
 Y_test = test[:,-1]
 
 print()
-# part a 
 print("________________ Part 4(a) ________________")
 print("Batch gradient descent")
 
 r = 0.01
-W, costs = LMS_gradiant(D_train, Y_train, r)
+W, costs = Least_mean_sqr_grad(D_train, Y_train, r)
 test_cost_value = cost_function(D_test, Y_test, W)
 print("Learning rate: ", r)
 print("The learned weight vector: ", W)
@@ -113,7 +106,7 @@ print("________________ Part 4(b) ________________")
 print("stochastic gradient descent")
 
 r = 0.001
-W, costs = sgd(D_train, Y_train, r)
+W, costs = stochastic_grad_descent(D_train, Y_train, r)
 test_cost_value = cost_function(D_test, Y_test, W)
 print("Learning rate: ", r)
 print("The learned weight vector: ", W)

@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from id3_functions import predict, ID3, category_to_numerical_features
+from id3_functions import predict, ID3, get_bank_data
 import matplotlib.pyplot as plt 
 
 #  bagged tree
@@ -18,53 +18,45 @@ def bagging_model(df, n, n_trees, replacement = True):
         trees[i] = ID3(df_sampled, metric = 'entropy', tree_depth = 20)
     return(trees)
 
-column_names = ['age', 'job', 'marital', 'education', 'default', 'balance', 'housing', 'loan', 'contact', 'day', 'month', 'duration', 'campaign', 'pdays', 'previous', 'poutcome', 'y']
-types = {'age': int, 'job': str, 'marital': str, 'education': str,'default': str,'balance': int,'housing': str,'loan': str,'contact': str,'day': int,'month': str,'duration': int, \
-		'campaign': int,'pdays': int,'previous': int,'poutcome': str,'y': str}
+# column_names = ['age', 'job', 'marital', 'education', 'default', 'balance', 'housing', 'loan', 'contact', 'day', 'month', 'duration', 'campaign', 'pdays', 'previous', 'poutcome', 'y']
+# types = {'age': int, 'job': str, 'marital': str, 'education': str,'default': str,'balance': int,'housing': str,'loan': str,'contact': str,'day': int,'month': str,'duration': int, \
+# 		'campaign': int,'pdays': int,'previous': int,'poutcome': str,'y': str}
 
-# load train data 
-train_data =  pd.read_csv('data/bank/train.csv', names=column_names, dtype=types)
-# load test data 
-test_data =  pd.read_csv('data/bank/test.csv', names=column_names, dtype=types)
+# # load train data 
+# train_data =  pd.read_csv('data/bank/train.csv', names=column_names, dtype=types)
+# # load test data 
+# test_data =  pd.read_csv('data/bank/test.csv', names=column_names, dtype=types)
 
-numerical_features = ['age', 'balance', 'day', 'duration', 'campaign', 'pdays', 'previous']
+# numerical_features = ['age', 'balance', 'day', 'duration', 'campaign', 'pdays', 'previous']
 
-train_data = category_to_numerical_features(train_data, numerical_features)
-test_data = category_to_numerical_features(test_data, numerical_features)
+# train_data = category_to_numerical_features(train_data, numerical_features)
+# test_data = category_to_numerical_features(test_data, numerical_features)
 
 
-def bagging_predict(df, trees):
-    targets = df.to_numpy()
-    y_pred = {}
-    for k in trees.keys():
-        _, y_pred[k] = predict(df, trees[k])
-    y_pred_array = pd.DataFrame(y_pred).mode(axis=1)[0].to_numpy()
 
-    # error = 1 - sum(1 for x,y in zip(df[df.columns[-1]],y_pred_list) if x == y) / len(df[df.columns[-1]])
 
-    error = sum(1 - np.isin(targets[:,-1], y_pred_array))/y_pred_array.size
-    return(error, y_pred_array)
+# features_dict = {}
+# features_dict['age'] = [0, 1]
+# features_dict['balance'] = [0, 1]
+# features_dict['day'] = [0, 1]
+# features_dict['previous'] = [0, 1]
+# features_dict['campaign'] = [0, 1]
+# features_dict['pdays'] = [0, 1]
+# features_dict['duration'] = [0, 1]
+# features_dict['loan'] = ['yes', 'no']
+# features_dict['default'] = ['yes', 'no']
+# features_dict['housing'] = ['yes', 'no']
+# features_dict['job'] = ['admin.', 'unknown', 'unemployed', 'management', 'housemaid', 'entrepreneur', 'student', 'blue-collar', 'self-employed', 'retired', 'technician', 'services']
+# features_dict['marital'] = ['married','divorced','single']
+# features_dict['education'] = ['unknown', 'secondary', 'primary', 'tertiary']
+# features_dict['contact'] = ['unknown', 'telephone', 'cellular']
+# features_dict['month'] = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec']
+# features_dict['poutcome'] = ['unknown', 'other', 'failure', 'success']
 
-features_dict = {}
-features_dict['age'] = [0, 1]
-features_dict['balance'] = [0, 1]
-features_dict['day'] = [0, 1]
-features_dict['previous'] = [0, 1]
-features_dict['campaign'] = [0, 1]
-features_dict['pdays'] = [0, 1]
-features_dict['duration'] = [0, 1]
-features_dict['loan'] = ['yes', 'no']
-features_dict['default'] = ['yes', 'no']
-features_dict['housing'] = ['yes', 'no']
-features_dict['job'] = ['admin.', 'unknown', 'unemployed', 'management', 'housemaid', 'entrepreneur', 'student', 'blue-collar', 'self-employed', 'retired', 'technician', 'services']
-features_dict['marital'] = ['married','divorced','single']
-features_dict['education'] = ['unknown', 'secondary', 'primary', 'tertiary']
-features_dict['contact'] = ['unknown', 'telephone', 'cellular']
-features_dict['month'] = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec']
-features_dict['poutcome'] = ['unknown', 'other', 'failure', 'success']
+# label_dict = {}
+# label_dict['y'] = ['yes', 'no']
 
-label_dict = {}
-label_dict['y'] = ['yes', 'no']
+features_dict, label_dict, train_data, test_data = get_bank_data()
 
 def bias_e(df, y_pred_array):
     targets = df.to_numpy()
@@ -80,6 +72,18 @@ train_errors, test_errors = [0 for x in range(T)], [0 for x in range(T)]
 
 test_py = np.array([0 for x in range(test_size)])
 train_py = np.array([0 for x in range(train_size)])
+
+def bagging_predict(df, trees):
+    targets = df.to_numpy()
+    y_pred = {}
+    for k in trees.keys():
+        _, y_pred[k] = predict(df, trees[k])
+    y_pred_array = pd.DataFrame(y_pred).mode(axis=1)[0].to_numpy()
+
+    # error = 1 - sum(1 for x,y in zip(df[df.columns[-1]],y_pred_list) if x == y) / len(df[df.columns[-1]])
+
+    error = sum(1 - np.isin(targets[:,-1], y_pred_array))/y_pred_array.size
+    return(error, y_pred_array)
 
 for t in range(T):
 
@@ -175,10 +179,10 @@ true_y[true_y == 'yes'] = 1
 true_y[true_y == 'no'] = -1 
 true_y = true_y.astype(int)
 
-# pick the first tree 
+# choose first tree 
 test_p_first = test_p_first/100 
 
-# calculate bias 
+
 bias = np.mean(np.square(test_p_first - true_y))
 variance = np.sum(np.square(test_p_first - np.mean(test_p_first))) / (test_size -1)
 squareError = bias + variance 
@@ -188,10 +192,10 @@ print()
 print("________________ Part 2(c) ________________")
 print("results for 100 single tree predictor-  bias: ", bias, "    variance: ", variance, "    Gen Squared Error: ", squareError)
 
-# bagged tree 
+
 test_p = np.sum(test_p,axis=0) / 50000
 
-# bias 
+
 bias = np.mean(np.square(test_p - true_y))
 variance = np.sum(np.square(test_p - np.mean(test_p))) / (test_size -1)
 squareError = bias + variance 
@@ -200,5 +204,5 @@ print()
 print()
 print("results for 100 bagged tree predictor-   bias: ", bias, "    variance: ", variance, "    Gen Squared Error: " ,squareError)
 
-# plt.draw()
+
 plt.show()
