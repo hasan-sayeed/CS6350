@@ -208,7 +208,7 @@ for num in num_subset:
 	
 	print()
 	print('Test error for subset size {s} is: {e}'.format(s = num, e = test_errors[-1]))
-	# save_fig(train_errors, test_errors, num, 'bank_'+str(num)+'.png')
+	# save_fig(train_errors, test_errors, num, 'bank_'+str(num)+'.png')   O
 	plt.plot(train_errors, label = "training error", c = 'b', linewidth = 2)
 	plt.plot(test_errors, label = "test error", c = 'r', linewidth = 2)
 	plt.xlabel('T')
