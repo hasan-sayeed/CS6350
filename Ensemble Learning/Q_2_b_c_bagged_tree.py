@@ -65,7 +65,7 @@ def bias_e(df, y_pred_array):
     bias = (sum((targets[:,-1]-y_pred_array)**2))/y_pred_array.size
     return(bias)
 
-T = 5  # number of trees you want!
+T = 500  # number of trees you want!
 
 train_size, test_size = len(train_data),len(test_data)
 train_errors, test_errors = [0 for x in range(T)], [0 for x in range(T)]
@@ -153,9 +153,9 @@ plt.legend()
 train_size, test_size = len(train_data),len(test_data)
 test_p = np.array([[0 for x in range(test_size)] for y in range(100)])
 test_p_first = np.array([0 for x in range(test_size)])
-for i in range(2):
+for i in range(100):
 	train_subset = train_data.sample(n=1000, replace=False, random_state=i)
-	for t in range(5):
+	for t in range(500):
 		# get sample train data 
 		sampled = train_subset.sample(frac=1, replace=True, random_state=t)
 

@@ -90,7 +90,7 @@ def adaboost(df_train, df_test, actual_label, w):
 
 features_dict, label_dict, train_data, test_data = get_bank_data()
 
-T = 5    #  Number of trees you want!
+T = 500    #  Number of trees you want!
 
 train_size, test_size = len(train_data),len(test_data)
 alphas = [0 for x in range(T)]

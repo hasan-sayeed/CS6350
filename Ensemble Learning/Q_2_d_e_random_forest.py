@@ -29,7 +29,7 @@ def random_forrest_predict(df, trees):
 	return(error, y_pred_list)
 
 def rf(features_dict, label_dict, train_data, test_data, num_subset, label_name):
-	T = 5
+	T = 500
 	train_size, test_size = len(train_data),len(test_data)
 	train_errors, test_errors = [0 for x in range(T)], [0 for x in range(T)]
 
@@ -131,9 +131,9 @@ def rf_b_v(features_dict, label_dict, train_data, test_data, num_subset, label_n
 	test_py = np.array([[0 for x in range(test_size)] for y in range(100)])
 	test_py_first = np.array([0 for x in range(test_size)])
 
-	for i in range(2):
+	for i in range(100):
 		train_subset = train_data.sample(n=1000, replace=False, random_state=i)
-		for t in range(5):
+		for t in range(500):
 			sampled = train_subset.sample(frac=0.1, replace=True, random_state=t)
 
 			# build tree 
