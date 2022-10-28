@@ -1,1 +1,1 @@
-Run `run_linear_reg.sh` for results of question 4.
+Run `run_linear_reg.sh` for results of question 4. This will run linear regression algorithm.

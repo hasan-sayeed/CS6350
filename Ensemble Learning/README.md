@@ -1,1 +1,1 @@
-Run the `run_ensemble_learning.sh` file for results of question 2.
+Run the `run_ensemble_learning.sh` file for results of question 2. This will run AdaBoost, bagging and random forest algorithms.
