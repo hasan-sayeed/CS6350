@@ -1,0 +1,1 @@
+Run `run_svm.sh` file from the terminal for results.
